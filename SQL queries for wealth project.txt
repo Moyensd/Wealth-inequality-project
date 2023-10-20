@@ -1,0 +1,64 @@
+alter table dbo.[dfa-networth-levels]
+ADD ID text;
+
+update dbo.[dfa-networth-levels]
+set ID = concat(Date, Category);
+
+select*
+from dbo.[dfa-networth-levels]
+
+select
+    substring(Date, 1, charindex(':', Date) - 1) AS Year,
+    substring(Date, charindex(':', Date) + 1, len(Date)) AS Quarter
+from dbo.[dfa-networth-levels];
+
+alter table dbo.[dfa-networth-levels]
+ADD Year VARCHAR(4),
+    Quarter VARCHAR(2);
+
+UPDATE dbo.[dfa-networth-levels]
+SET Year = LEFT(Date, CHARINDEX(':', Date) - 1),
+    Quarter = RIGHT(Date, LEN(Date) - CHARINDEX(':', Date));
+
+SELECT
+    t1.Date,
+    t1.Category,
+    t1.Net_worth,
+    t1.Net_worth / CAST(
+        (SELECT SUM(t2.Net_worth) 
+         FROM dbo.[dfa-networth-levels] t2 
+         WHERE t2.Date = t1.Date) AS FLOAT) AS Average_Networth,
+	t1.Year,
+	t1.Quarter,
+	(SELECT SUM(t2.Net_worth) 
+     FROM dbo.[dfa-networth-levels] t2 
+     WHERE t2.Date = t1.Date) / 1000.0 AS total_wealth
+INTO dbo.[new_table_name] 
+FROM dbo.[dfa-networth-levels] t1;
+
+ALTER TABLE [dbo].[new_table_name]
+ADD networth_per_thousand FLOAT;
+
+UPDATE [dbo].[new_table_name]
+SET networth_per_thousand = t1.Average_Networth / 9
+FROM [dbo].[new_table_name] t1
+WHERE t1.Category = 'remainingTop1';
+
+UPDATE [dbo].[new_table_name]
+SET networth_per_thousand = t1.Average_Networth
+FROM [dbo].[new_table_name] t1
+WHERE t1.Category = 'TopPt1';
+
+select *
+from[dbo].[new_table_name]
+
+UPDATE [dbo].[new_table_name]
+SET networth_per_thousand = t1.Average_Networth / 400
+FROM [dbo].[new_table_name] t1
+WHERE t1.Category = 'Next40';
+
+UPDATE [dbo].[new_table_name]
+SET networth_per_thousand = t1.Average_Networth / 500
+FROM [dbo].[new_table_name] t1
+WHERE t1.Category = 'Bottom50';
+
