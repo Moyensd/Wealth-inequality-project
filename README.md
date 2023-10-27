@@ -22,11 +22,13 @@ The main objective of this analysis is to gain a deep understanding of how wealt
 
 The repository is organized as follows:
 
-- `data/`: This directory contains the raw data obtained from the Federal Reserve. It includes data files for different years and relevant metadata.
+- `dfa-networth-levels.csv/`: This directory contains the raw data obtained from the Federal Reserve. It includes data files for different years and relevant metadata.
 
-- `powerquery/`: Power query and sql used for data cleaning. 
+- `SQL queries for wealth project.txt/`: Power query and sql used for data cleaning. 
 
-- `figures/`: Plots and charts generated from the analysis, which provide visual insights into wealth distribution and individual-level changes.
+- `wealth data project.pbix/`: Plots and charts generated from the analysis, which provide visual insights into wealth distribution and individual-level changes.
+
+- `wealth data project.pdf/`: pdf file of the visualzation.
 
 - `README.md`: The main documentation file you are currently reading, providing an overview of the project.
 
